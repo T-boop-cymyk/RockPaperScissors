@@ -1,50 +1,74 @@
 function getComputerChoice() {
-    let choices = ["Rock", "Paper", "Scissors"]
-    return choices[Math.floor(Math.random() * 3)]
+    let choices = ["Rock", "Paper", "Scissors"];
+    return choices[Math.floor(Math.random() * 3)];
 }
 
-function playRound(playerSelection, computerSelection) {
+function playRound(playerSelection) {
     playerSelection = playerSelection.toLowerCase()
-    computerSelection = computerSelection.toLowerCase()
+    let computerSelection = getComputerChoice().toLowerCase();
+    let message;
 
-    if (playerSelection == computerSelection)
-        return "It's a tie, you both picked " + playerSelection
-
-    if (playerSelection == "rock") {
-        if (computerSelection == "paper")
-            return "Paper beats rock, you lose!"
-        else return "Rock beats scissors, you win!"
+    switch (playerSelection) {
+        case "rock":
+            switch (computerSelection) {
+                case "rock":
+                    message = "You both picked rock, it's a tie!";
+                    break;
+                case "paper":
+                    message = "Paper beats rock, you lose!"
+                    computerScore++;
+                    break;
+                case "scissors":
+                    message = "Rock beats scissors, you win!";
+                    playerScore++;
+                    break;
+            }
+            break;
+        case "paper":
+            switch (computerSelection) {
+                case "rock":
+                    message = "Paper beats rock, you win!";
+                    playerScore++;
+                    break;
+                case "paper":
+                    message = "You both picked paper, it's a tie!"
+                    break;
+                case "scissors":
+                    message = "Scissors beats paper, you lose!";
+                    computerScore++;
+                    break;
+            }
+            break;
+        case "scissors":
+            switch (computerSelection) {
+                case "rock":
+                    message = "Rock beats scissors, you lose!";
+                    computerScore++;
+                    break;
+                case "paper":
+                    message = "Scissors beats paper, you win!"
+                    playerScore++;
+                    break;
+                case "scissors":
+                    message = "You both picked scissors, it's a tie!";
+                    break;
+            }
+            break;
     }
+    let result = document.querySelector("#result");
+    result.textContent = "Result: " + message;
+    let scoreboard = document.querySelector("#scoreboard");
+    scoreboard.textContent = `Your score: ${playerScore} *** Computer score: ${computerScore}`;
 
-    if (playerSelection == "paper") {
-        if (computerSelection == "rock")
-            return "Paper beats rock, you win!"
-        else return "Scissors beats paper, you lose!"
+    let finalResult = document.querySelector("#finalResult")
+    if(playerScore == 3) {
+        finalResult.textContent += "You have won the game!";
     }
-
-    if (playerSelection == "scissors") {
-        if (computerSelection == "paper")
-            return "Scissors beats paper, you win!"
-        else return "Rock beats scissors, you lose!"
+    if(computerScore == 3) {
+        finalResult.textContent += "You have lost the game!";
     }
 }
 
-function game(numberOfRounds) {
-    let playerScore = 0
-    let computerScore = 0
-    let message
-    while(playerScore + computerScore < 5) {
-        playerSelection = prompt("Pick rock, paper or scissors")
-        message = playRound(playerSelection, getComputerChoice())
-        console.log(message)
-        if(message.substr(-2) == "n!") playerScore++
-        else if(message.substr(-2) == "e!") computerScore++
-    }
-    if (playerScore > computerScore) {
-        console.log("You won the game by winning " + playerScore + " out of 5 rounds!")
-    } else {
-        console.log("You lost the game. Your opponent won " + computerScore + " out of 5 rounds.")
-    }
-}
-
-game(5)
+let playerScore = 0;
+let computerScore = 0;
+let numberOfRounds = 5;
